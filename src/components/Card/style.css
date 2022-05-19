@@ -5,3 +5,10 @@
     border-radius: 10px;
     border: solid 2px blue;
 }
+
+@media screen and (min-width: 600px) {
+    .card {
+        width: 100px;
+        height: 130px;
+    }
+}
