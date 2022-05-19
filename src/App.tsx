@@ -17,6 +17,7 @@ function App() {
     const drawnedNumbers = shuffle<String>(numbers);
     const player1Numbers = drawnedNumbers.splice(0, 5) as String[];
     const player2Numbers = drawnedNumbers.splice(0, 5) as String[];
+
     setNumberDig(drawnedNumbers);
     setPlayer1Numbers(player1Numbers);
     setPlayer2Numbers(player2Numbers);
