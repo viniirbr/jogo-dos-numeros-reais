@@ -4,11 +4,12 @@ import './style.css'
 interface CardProps {
     content?: String,
     type: 'number' | 'number-empty' | 'sentence' | 'sentence-empty',
-    onCardClicked: (type:String) => void
+    onCardClicked: (type:String, id: number) => void,
+    id?: number
 }
 
 
-export default function Card({ content, type, onCardClicked }: CardProps) {
+export default function Card({ content, type, onCardClicked, id }: CardProps) {
     return (
         <div className="card"
             style={{
@@ -16,7 +17,7 @@ export default function Card({ content, type, onCardClicked }: CardProps) {
             ${type.match(/sentence/g)?.toString() === 'sentence' ? 'red' : 'blue'}`,
             backgroundColor: `${(type === 'number-empty' || type === 'sentence-empty') && 'transparent'}`
             }}
-            onClick={() => onCardClicked(type)}>
+            onClick={() => onCardClicked(type, id as number)}>
             {content}
         </div>
     )
