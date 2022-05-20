@@ -16,7 +16,7 @@ export function Game() {
   const [player2Numbers, setPlayer2Numbers] = useState<String[]>([]);
   const [hasDiggedNumber, setHasDiggedNumber] = useState(false);
   const [hasDiggedSentence, setHasDiggedSentence] = useState(false);
-  const [playerTurn, setPlayerTurn] = useState<1|2>(1);
+  const [playerTurn, setPlayerTurn] = useState<1 | 2>(1);
 
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function Game() {
     setNumberDig(numberDig);
   }, []);
 
-  const onCardClicked = (type: String, id: number, owner: 1|2|undefined) => {
+  const onCardClicked = (type: String, id: number, owner: 1 | 2 | undefined) => {
     if (type === 'sentence' && !hasDiggedSentence) { //retirar nova frase
       setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesDig]);
       let sentencesDigTemp = sentencesDig;
@@ -48,38 +48,53 @@ export function Game() {
         setPlayerTurn(2);
         setHasDiggedSentence(false);
 
-      } else if (playerTurn === 2 && owner === 2)  { //carta do jogador 2 foi clicada
+      } else if (playerTurn === 2 && owner === 2) { //carta do jogador 2 foi clicada
         setNumberPut([player2Numbers[id], ...numberPut])
         const player2NumbersTemp = [...player2Numbers];
         player2NumbersTemp.splice(id, 1);
         setPlayer2Numbers(player2NumbersTemp);
         setPlayerTurn(1);
         setHasDiggedSentence(false);
-      } else if (owner === undefined && !hasDiggedNumber) { //carta do cava de números foi clicada
-          if (playerTurn === 1) {
-            setPlayer1Numbers([...player1Numbers, numberDig?numberDig[0]:''])
-            const numberDigTemp = [...numberDig as String[]];
-            numberDigTemp.splice(0, 1)
-            setNumberDig(numberDigTemp);
-          }
-          if (playerTurn === 2) {
-            setPlayer2Numbers([...player2Numbers, numberDig?numberDig[0]:'0'])
-            const numberDigTemp = numberDig;
-            numberDigTemp?.splice(0, 1);
-            setNumberDig(numberDigTemp);
-          }
+
+      } else if (owner === undefined && hasDiggedNumber===false) { //carta do cava de números foi clicada
+        if (playerTurn === 1) {
+          setPlayer1Numbers([...player1Numbers, numberDig ? numberDig[0] : ''])
+          const numberDigTemp = [...numberDig as String[]];
+          numberDigTemp.splice(0, 1)
+          setNumberDig(numberDigTemp);
+          setHasDiggedNumber(true);
+        }
+        if (playerTurn === 2) {
+          setPlayer2Numbers([...player2Numbers, numberDig ? numberDig[0] : '0'])
+          const numberDigTemp = numberDig;
+          numberDigTemp?.splice(0, 1);
+          setNumberDig(numberDigTemp);
+          setHasDiggedNumber(true);
+        }
       }
     }
   }
 
-  console.log(numberDig)
-
+  function changeTurn() {
+    setPlayerTurn(playerTurn===1?2:1);
+    setHasDiggedNumber(false);
+    setHasDiggedSentence(false);
+  }
 
   return (
     <div className="game">
-      <div className="cards-deck cards-deck-player2">
-        {player2Numbers?.map((number, id) =>
-          <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={2}/>)}
+      <div className="player-area">
+        <div>
+          {playerTurn===1 && <button>Denunciar</button>}
+          {playerTurn===2 && <button onClick={changeTurn}>Passar</button>}
+        </div>
+        <div className="cards-deck cards-deck-player1">
+          {player2Numbers?.map((number, id) =>
+            <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={2} />)}
+        </div>
+        <div>
+          {playerTurn===2 && <h3>Sua vez!</h3>}
+        </div>
       </div>
 
       <div className="digs-container">
@@ -94,12 +109,21 @@ export function Game() {
             content={numberPut !== undefined ? numberPut[0] : undefined} onCardClicked={onCardClicked} />
         </div>
 
-        <Card type="number" onCardClicked={onCardClicked}/>
+        <Card type="number" onCardClicked={onCardClicked} />
       </div>
 
-      <div className="cards-deck cards-deck-player1">
-        {player1Numbers?.map((number, id) =>
-          <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={1}/>)}
+      <div className="player-area">
+        <div>
+          {playerTurn===1 && <h3>Sua vez!</h3>}
+        </div>
+        <div className="cards-deck cards-deck-player1">
+          {player1Numbers?.map((number, id) =>
+            <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={1} />)}
+        </div>
+        <div>
+          {playerTurn===2 && <button>Denunciar</button>}
+          {playerTurn===1 && hasDiggedNumber && <button onClick={changeTurn}>Passar</button>}
+        </div>
       </div>
     </div>
   )
