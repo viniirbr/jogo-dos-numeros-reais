@@ -1,10 +1,12 @@
+import { Dialog } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { numbers } from "../../assets/numbers";
 import shuffle from "../../assets/scripts/shuffle";
 import { Sentence, sentencesArray } from "../../assets/sentences"
+import { Button } from "../Button";
 import Card from "../Card";
+import { Report } from "../Report";
 import './style.css'
-
 
 export function Game() {
 
@@ -17,7 +19,7 @@ export function Game() {
   const [hasDiggedNumber, setHasDiggedNumber] = useState(false);
   const [hasDiggedSentence, setHasDiggedSentence] = useState(false);
   const [playerTurn, setPlayerTurn] = useState<1 | 2>(1);
-
+  let [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setSentencesDig(shuffle(sentencesArray));
@@ -56,7 +58,7 @@ export function Game() {
         setPlayerTurn(1);
         setHasDiggedSentence(false);
 
-      } else if (owner === undefined && hasDiggedNumber===false) { //carta do cava de números foi clicada
+      } else if (owner === undefined && hasDiggedNumber === false) { //carta do cava de números foi clicada
         if (playerTurn === 1) {
           setPlayer1Numbers([...player1Numbers, numberDig ? numberDig[0] : ''])
           const numberDigTemp = [...numberDig as String[]];
@@ -76,24 +78,27 @@ export function Game() {
   }
 
   function changeTurn() {
-    setPlayerTurn(playerTurn===1?2:1);
+    setPlayerTurn(playerTurn === 1 ? 2 : 1);
     setHasDiggedNumber(false);
     setHasDiggedSentence(false);
   }
 
   return (
     <div className="game">
+      <Report isOpen={isOpen} setIsOpen={setIsOpen}/>
+
       <div className="player-area">
         <div>
-          {playerTurn===1 && <button>Denunciar</button>}
-          {playerTurn===2 && <button onClick={changeTurn}>Passar</button>}
+          {playerTurn === 1 && <Button onClick={() => setIsOpen(true)} type='report'>Denunciar</Button>}
+          {playerTurn === 2 && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
+          
         </div>
         <div className="cards-deck cards-deck-player1">
           {player2Numbers?.map((number, id) =>
             <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={2} />)}
         </div>
         <div>
-          {playerTurn===2 && <h3>Sua vez!</h3>}
+          {playerTurn === 2 && <h3 className="text-green font-bold font-sans text-xl">Sua vez!</h3>}
         </div>
       </div>
 
@@ -114,15 +119,15 @@ export function Game() {
 
       <div className="player-area">
         <div>
-          {playerTurn===1 && <h3>Sua vez!</h3>}
+          {playerTurn === 1 && <h3 className="text-green font-bold font-sans text-xl">Sua vez!</h3>}
         </div>
         <div className="cards-deck cards-deck-player1">
           {player1Numbers?.map((number, id) =>
             <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={1} />)}
         </div>
         <div>
-          {playerTurn===2 && <button>Denunciar</button>}
-          {playerTurn===1 && hasDiggedNumber && <button onClick={changeTurn}>Passar</button>}
+          {playerTurn === 2 && <Button onClick={() => setIsOpen(true)} type='report'>Denunciar</Button>}
+          {playerTurn === 1 && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
         </div>
       </div>
     </div>
