@@ -3,13 +3,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'button-normal': {
+        normal: {
           100:'#754351',
           500:'#41252D',
           900:'#1A0F12'
         },
         text: '#EDE8EA',
-        'button-report': {
+        report: {
           100: '#FF7B7B',
           500: '#FF5252',
           900: '#A70000'
