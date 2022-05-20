@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { Game } from './components/Game'
+import { Instructions } from './components/Instructions';
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
@@ -11,7 +12,8 @@ function App() {
       {isStarted ?
         <Game />
         :
-        <button onClick={() => setIsStarted(!isStarted)}>Iniciar</button>}
+        <Instructions startGame={() => setIsStarted(!isStarted)} />
+      }
     </div>
   )
 }

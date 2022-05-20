@@ -59,7 +59,7 @@ export const sentencesArray: Sentence[] = [
         numbers: ['5,0', '12,00']
     },
     {
-        sentence: "Os dígitos do meu número s extendem infinitamente, mas não sou irracional",
+        sentence: "Os dígitos do meu número se extendem infinitamente, mas não sou irracional",
         numbers: ['1,9898...', '0,777...']
     }
 
