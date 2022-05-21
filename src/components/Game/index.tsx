@@ -1,9 +1,7 @@
-import { Dialog } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { numbers } from "../../assets/numbers";
 import shuffle from "../../assets/scripts/shuffle";
 import { Sentence, sentencesArray } from "../../assets/sentences"
-import { Button } from "../Button";
 import Card from "../Card";
 import { PlayerDeck } from "../PlayerDeck";
 import { Report } from "../Report";
@@ -20,7 +18,9 @@ export function Game() {
   const [hasDiggedNumber, setHasDiggedNumber] = useState(false);
   const [hasDiggedSentence, setHasDiggedSentence] = useState(false);
   const [playerTurn, setPlayerTurn] = useState<1 | 2>(1);
-  let [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [reportTitle, setReportTitle] = useState('');
+  const [reportText, setReportText] = useState('');
 
   useEffect(() => {
     setSentencesDig(shuffle(sentencesArray));
@@ -34,9 +34,7 @@ export function Game() {
   }, []);
 
   const onCardClicked = (type: String, id: number, owner: 1 | 2 | undefined) => {
-    console.log(hasDiggedSentence)
-    console.log('owner: ' + owner)
-    console.log(playerTurn)
+
     if (type === 'sentence' && !hasDiggedSentence) { //retirar nova frase
       setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesDig]);
       let sentencesDigTemp = sentencesDig;
@@ -51,16 +49,14 @@ export function Game() {
         const player1NumbersTemp = [...player1Numbers];
         player1NumbersTemp.splice(id, 1);
         setPlayer1Numbers(player1NumbersTemp);
-        setPlayerTurn(2);
-        setHasDiggedSentence(false);
+        changeTurn();
 
       } else if (playerTurn === 2 && owner === 2) { //carta do jogador 2 foi clicada
         setNumberPut([player2Numbers[id], ...numberPut])
         const player2NumbersTemp = [...player2Numbers];
         player2NumbersTemp.splice(id, 1);
         setPlayer2Numbers(player2NumbersTemp);
-        setPlayerTurn(1);
-        setHasDiggedSentence(false);
+        changeTurn();
 
       } else if (owner === undefined && hasDiggedNumber === false) { //carta do cava de números foi clicada
         if (playerTurn === 1) {
@@ -87,12 +83,19 @@ export function Game() {
     setHasDiggedSentence(false);
   }
 
+  function report() {
+    console.log(numberPut)
+    console.log(sentencesPut)
+    setIsOpen(true);
+  }
+
   return (
     <div className="game">
-      <Report isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Report isOpen={isOpen} setIsOpen={setIsOpen} title={reportTitle} text={reportText}/>
 
-      <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} setIsOpen={setIsOpen}
-        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked} owner={2}/>
+      <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} report={report}
+        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
+        owner={2} hasDiggedSentence={hasDiggedSentence} />
 
       <div className="digs-container">
 
@@ -109,8 +112,9 @@ export function Game() {
         <Card type="number" onCardClicked={onCardClicked} />
       </div>
 
-      <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} setIsOpen={setIsOpen}
-        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked} owner={1}/>
+      <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} report={report}
+        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
+        owner={1} hasDiggedSentence={hasDiggedSentence} />
     </div>
   )
 }

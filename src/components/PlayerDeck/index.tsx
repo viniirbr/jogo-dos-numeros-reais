@@ -4,20 +4,21 @@ import Card from "../Card"
 interface PlayerDeckProps {
     playerTurn: 1 | 2,
     owner: 1 | 2,
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    report: () => void,
     changeTurn: () => void,
     hasDiggedNumber: Boolean,
+    hasDiggedSentence: Boolean,
     playerNumbers: String[],
     onCardClicked: (type: String, id: number, owner: 1 | 2 | undefined) => void
 }
 
 
-export function PlayerDeck({ playerTurn, setIsOpen, changeTurn, hasDiggedNumber,
-    playerNumbers, onCardClicked, owner }: PlayerDeckProps) {
+export function PlayerDeck({ playerTurn, report, changeTurn, hasDiggedNumber,
+    hasDiggedSentence, playerNumbers, onCardClicked, owner }: PlayerDeckProps) {
     return (
         <div className="player-area">
             <div>
-                {playerTurn !== owner && <Button onClick={() => setIsOpen(true)} type='report'>Denunciar</Button>}
+                {playerTurn === owner && !hasDiggedSentence && <Button onClick={report} type='report'>Denunciar</Button>}
                 {playerTurn === owner && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
 
             </div>
