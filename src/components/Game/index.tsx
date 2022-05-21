@@ -38,8 +38,8 @@ export function Game() {
     if (type === 'sentence' && !hasDiggedSentence) { //retirar nova frase
       setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesPut]);
       let sentencesDigTemp = sentencesDig;
-      sentencesDigTemp.pop();
-      setSentencesDig(sentencesDigTemp);
+      let removed = sentencesDigTemp.pop();
+      setSentencesDig([removed as Sentence, ...sentencesDigTemp]); //cava de frases não diminui
       setHasDiggedSentence(true);
     }
 
