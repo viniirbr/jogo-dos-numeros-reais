@@ -16,17 +16,16 @@ interface PlayerDeckProps {
 export function PlayerDeck({ playerTurn, report, changeTurn, hasDiggedNumber,
     hasDiggedSentence, playerNumbers, onCardClicked, owner }: PlayerDeckProps) {
     return (
-        <div className="player-area">
-            <div>
+        <div className="flex items-center justify-between w-full px-2">
+            <div className="w-[20%]">
                 {playerTurn === owner && !hasDiggedSentence && <Button onClick={report} type='report'>Denunciar</Button>}
                 {playerTurn === owner && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
-
             </div>
-            <div className="cards-deck cards-deck-player1">
+            <div className="flex flex-wrap-reverse w-[50%]">
                 {playerNumbers?.map((number, id) =>
                     <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={owner} />)}
             </div>
-            <div>
+            <div className="w-[20%]">
                 {playerTurn === owner && <h3 className="text-green font-bold font-sans text-xl">Sua vez!</h3>}
             </div>
         </div>

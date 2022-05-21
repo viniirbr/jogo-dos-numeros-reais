@@ -8,7 +8,7 @@ import { Report } from "../Report";
 import './style.css'
 
 export function Game() {
-  
+
   const [sentencesDig, setSentencesDig] = useState<Sentence[]>([]);
   const [sentencesPut, setSentencesPut] = useState<Sentence[]>([]);
   const [numberDig, setNumberDig] = useState<String[]>();
@@ -85,37 +85,45 @@ export function Game() {
 
   function report() {
 
-    if (sentencesPut[0].numbers.includes(numberPut[0] as string)) { //verifica se a carta colocada está correta
-      setReportTitle('Denúncia Rejeitada!');
-      setReportText(`O jogador ${playerTurn===1?'1':'2'} deverá recolher todas as cartas da mesa.`)
-      if (playerTurn === 1) {
-        setPlayer1Numbers([...player1Numbers, ...numberPut]);
-        setNumberPut([]);
-      } else {
-        setPlayer2Numbers([...player2Numbers, ...numberPut]);
-        setNumberPut([]);
-      }
+    if (numberPut.length === 0) {
+      setReportTitle('Você não pode denunciar agora.');
+      setReportText('')
     } else {
-      setReportTitle('Denúncia Aceita!');
-      setReportText(`O jogador ${playerTurn===1?'2':'1'} deverá recolher todas as cartas da mesa.`);
-      if (playerTurn === 1) {
-        setPlayer2Numbers([...player2Numbers, ...numberPut]);
-        setNumberPut([]);
+      if (sentencesPut[0].numbers.includes(numberPut[0] as string)) { //verifica se a carta colocada está correta
+        setReportTitle('Denúncia Rejeitada!');
+        setReportText(`O jogador ${playerTurn === 1 ? '1' : '2'} deverá recolher todas as cartas da mesa.`)
+        if (playerTurn === 1) {
+          setPlayer1Numbers([...player1Numbers, ...numberPut]);
+          setNumberPut([]);
+        } else {
+          setPlayer2Numbers([...player2Numbers, ...numberPut]);
+          setNumberPut([]);
+        }
       } else {
-        setPlayer1Numbers([...player1Numbers, ...numberPut]);
-        setNumberPut([]);
+        setReportTitle('Denúncia Aceita!');
+        setReportText(`O jogador ${playerTurn === 1 ? '2' : '1'} deverá recolher todas as cartas da mesa.`);
+        if (playerTurn === 1) {
+          setPlayer2Numbers([...player2Numbers, ...numberPut]);
+          setNumberPut([]);
+        } else {
+          setPlayer1Numbers([...player1Numbers, ...numberPut]);
+          setNumberPut([]);
+        }
       }
     }
     setIsOpen(true);
   }
 
   return (
-    <div className="game">
+    <div className="flex flex-col h-[100vh] justify-between p-3">
       <Report isOpen={isOpen} setIsOpen={setIsOpen} title={reportTitle} text={reportText} />
 
-      <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} report={report}
-        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
-        owner={2} hasDiggedSentence={hasDiggedSentence} />
+      {player2Numbers.length === 0
+        ? <h1>O jogador 2 venceu!</h1>
+        :
+        <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} report={report}
+          changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
+          owner={2} hasDiggedSentence={hasDiggedSentence} />}
 
       <div className="digs-container">
 
@@ -132,9 +140,13 @@ export function Game() {
         <Card type="number" onCardClicked={onCardClicked} />
       </div>
 
-      <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} report={report}
-        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
-        owner={1} hasDiggedSentence={hasDiggedSentence} />
+      {player1Numbers.length === 0
+        ? <h1>O jogador 1 venceu!</h1>
+        :
+        <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} report={report}
+          changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
+          owner={1} hasDiggedSentence={hasDiggedSentence} />
+      }
     </div>
   )
 }
