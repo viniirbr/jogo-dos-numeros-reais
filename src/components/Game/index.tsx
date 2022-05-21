@@ -5,6 +5,7 @@ import shuffle from "../../assets/scripts/shuffle";
 import { Sentence, sentencesArray } from "../../assets/sentences"
 import { Button } from "../Button";
 import Card from "../Card";
+import { PlayerDeck } from "../PlayerDeck";
 import { Report } from "../Report";
 import './style.css'
 
@@ -33,6 +34,9 @@ export function Game() {
   }, []);
 
   const onCardClicked = (type: String, id: number, owner: 1 | 2 | undefined) => {
+    console.log(hasDiggedSentence)
+    console.log('owner: ' + owner)
+    console.log(playerTurn)
     if (type === 'sentence' && !hasDiggedSentence) { //retirar nova frase
       setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesDig]);
       let sentencesDigTemp = sentencesDig;
@@ -85,22 +89,10 @@ export function Game() {
 
   return (
     <div className="game">
-      <Report isOpen={isOpen} setIsOpen={setIsOpen}/>
+      <Report isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      <div className="player-area">
-        <div>
-          {playerTurn === 1 && <Button onClick={() => setIsOpen(true)} type='report'>Denunciar</Button>}
-          {playerTurn === 2 && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
-          
-        </div>
-        <div className="cards-deck cards-deck-player1">
-          {player2Numbers?.map((number, id) =>
-            <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={2} />)}
-        </div>
-        <div>
-          {playerTurn === 2 && <h3 className="text-green font-bold font-sans text-xl">Sua vez!</h3>}
-        </div>
-      </div>
+      <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} setIsOpen={setIsOpen}
+        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked} owner={2}/>
 
       <div className="digs-container">
 
@@ -117,19 +109,8 @@ export function Game() {
         <Card type="number" onCardClicked={onCardClicked} />
       </div>
 
-      <div className="player-area">
-        <div>
-          {playerTurn === 1 && <h3 className="text-green font-bold font-sans text-xl">Sua vez!</h3>}
-        </div>
-        <div className="cards-deck cards-deck-player1">
-          {player1Numbers?.map((number, id) =>
-            <Card content={number} key={id} type='number' onCardClicked={onCardClicked} id={id} owner={1} />)}
-        </div>
-        <div>
-          {playerTurn === 2 && <Button onClick={() => setIsOpen(true)} type='report'>Denunciar</Button>}
-          {playerTurn === 1 && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
-        </div>
-      </div>
+      <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} setIsOpen={setIsOpen}
+        changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked} owner={1}/>
     </div>
   )
 }
