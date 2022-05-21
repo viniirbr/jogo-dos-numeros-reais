@@ -8,9 +8,9 @@ import { Report } from "../Report";
 import './style.css'
 
 export function Game() {
-
+  
   const [sentencesDig, setSentencesDig] = useState<Sentence[]>([]);
-  const [sentencesPut, setSentencesPut] = useState<Sentence[]>();
+  const [sentencesPut, setSentencesPut] = useState<Sentence[]>([]);
   const [numberDig, setNumberDig] = useState<String[]>();
   const [numberPut, setNumberPut] = useState<String[]>([]);
   const [player1Numbers, setPlayer1Numbers] = useState<String[]>([]);
@@ -36,7 +36,7 @@ export function Game() {
   const onCardClicked = (type: String, id: number, owner: 1 | 2 | undefined) => {
 
     if (type === 'sentence' && !hasDiggedSentence) { //retirar nova frase
-      setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesDig]);
+      setSentencesPut([sentencesDig[sentencesDig.length - 1], ...sentencesPut]);
       let sentencesDigTemp = sentencesDig;
       sentencesDigTemp.pop();
       setSentencesDig(sentencesDigTemp);
@@ -84,14 +84,34 @@ export function Game() {
   }
 
   function report() {
-    console.log(numberPut)
-    console.log(sentencesPut)
+
+    if (sentencesPut[0].numbers.includes(numberPut[0] as string)) { //verifica se a carta colocada está correta
+      setReportTitle('Denúncia Rejeitada!');
+      setReportText(`O jogador ${playerTurn===1?'1':'2'} deverá recolher todas as cartas da mesa.`)
+      if (playerTurn === 1) {
+        setPlayer1Numbers([...player1Numbers, ...numberPut]);
+        setNumberPut([]);
+      } else {
+        setPlayer2Numbers([...player2Numbers, ...numberPut]);
+        setNumberPut([]);
+      }
+    } else {
+      setReportTitle('Denúncia Aceita!');
+      setReportText(`O jogador ${playerTurn===1?'2':'1'} deverá recolher todas as cartas da mesa.`);
+      if (playerTurn === 1) {
+        setPlayer2Numbers([...player2Numbers, ...numberPut]);
+        setNumberPut([]);
+      } else {
+        setPlayer1Numbers([...player1Numbers, ...numberPut]);
+        setNumberPut([]);
+      }
+    }
     setIsOpen(true);
   }
 
   return (
     <div className="game">
-      <Report isOpen={isOpen} setIsOpen={setIsOpen} title={reportTitle} text={reportText}/>
+      <Report isOpen={isOpen} setIsOpen={setIsOpen} title={reportTitle} text={reportText} />
 
       <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} report={report}
         changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
@@ -102,8 +122,8 @@ export function Game() {
         <Card type="sentence" onCardClicked={onCardClicked} />
 
         <div className="cards-put">
-          <Card type={sentencesPut !== undefined ? 'sentence' : 'sentence-empty'}
-            content={sentencesPut !== undefined ? sentencesPut[0].sentence : undefined} onCardClicked={onCardClicked} />
+          <Card type={sentencesPut.length !== 0 ? 'sentence' : 'sentence-empty'}
+            content={sentencesPut.length !== 0 ? sentencesPut[0].sentence : undefined} onCardClicked={onCardClicked} />
 
           <Card type={numberPut.length !== 0 ? 'number' : 'number-empty'}
             content={numberPut !== undefined ? numberPut[0] : undefined} onCardClicked={onCardClicked} />
@@ -118,3 +138,8 @@ export function Game() {
     </div>
   )
 }
+
+/* 
+carta correta
+
+*/
