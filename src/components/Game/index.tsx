@@ -85,10 +85,6 @@ export function Game() {
 
   function report() {
 
-    if (numberPut.length === 0) {
-      setReportTitle('Você não pode denunciar agora.');
-      setReportText('')
-    } else {
       if (sentencesPut[0].numbers.includes(numberPut[0] as string)) { //verifica se a carta colocada está correta
         setReportTitle('Denúncia Rejeitada!');
         setReportText(`O jogador ${playerTurn === 1 ? '1' : '2'} deverá recolher todas as cartas da mesa.`)
@@ -110,7 +106,6 @@ export function Game() {
           setNumberPut([]);
         }
       }
-    }
     setIsOpen(true);
   }
 
@@ -123,7 +118,7 @@ export function Game() {
         :
         <PlayerDeck playerNumbers={player2Numbers} playerTurn={playerTurn} report={report}
           changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
-          owner={2} hasDiggedSentence={hasDiggedSentence} />}
+          owner={2} hasDiggedSentence={hasDiggedSentence} numberPut={numberPut}/>}
 
       <div className="digs-container">
 
@@ -145,7 +140,7 @@ export function Game() {
         :
         <PlayerDeck playerNumbers={player1Numbers} playerTurn={playerTurn} report={report}
           changeTurn={changeTurn} hasDiggedNumber={hasDiggedNumber} onCardClicked={onCardClicked}
-          owner={1} hasDiggedSentence={hasDiggedSentence} />
+          owner={1} hasDiggedSentence={hasDiggedSentence} numberPut={numberPut}/>
       }
     </div>
   )

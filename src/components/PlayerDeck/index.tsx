@@ -9,16 +9,18 @@ interface PlayerDeckProps {
     hasDiggedNumber: Boolean,
     hasDiggedSentence: Boolean,
     playerNumbers: String[],
-    onCardClicked: (type: String, id: number, owner: 1 | 2 | undefined) => void
+    onCardClicked: (type: String, id: number, owner: 1 | 2 | undefined) => void,
+    numberPut: String[];
 }
 
 
 export function PlayerDeck({ playerTurn, report, changeTurn, hasDiggedNumber,
-    hasDiggedSentence, playerNumbers, onCardClicked, owner }: PlayerDeckProps) {
+    hasDiggedSentence, playerNumbers, onCardClicked, owner, numberPut }: PlayerDeckProps) {
     return (
-        <div className="flex items-center justify-between w-full px-2">
+        <div className="flex items-center justify-between w-full px-2 p-0">
             <div className="w-[20%]">
-                {playerTurn === owner && !hasDiggedSentence && <Button onClick={report} type='report'>Denunciar</Button>}
+                {playerTurn === owner && !hasDiggedSentence && numberPut.length !== 0 &&
+                    <Button onClick={report} type='report'>Denunciar</Button>}
                 {playerTurn === owner && hasDiggedNumber && <Button onClick={changeTurn}>Passar</Button>}
             </div>
             <div className="flex flex-wrap-reverse w-[50%]">

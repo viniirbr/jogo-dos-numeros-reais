@@ -14,13 +14,14 @@ module.exports = {
           500: '#FF5252',
           900: '#A70000'
         },
-        green: '#388E3C'
+        green: '#388E3C',
+        numberCardBg: '#88A17D',
+        sentenceCardBg: '#E2797B'
       },
     },
     fontFamily: {
       'sans': ['Inter'],
       'cursive': ['Abril Fatface'],
-      'display':['Oswald']
     },
   },
   plugins: [],
