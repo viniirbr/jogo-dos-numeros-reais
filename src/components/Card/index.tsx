@@ -1,6 +1,3 @@
-import './style.css'
-
-
 interface CardProps {
     content?: String,
     type: 'number' | 'number-empty' | 'sentence' | 'sentence-empty',
@@ -19,7 +16,7 @@ export default function Card({ content, type, onCardClicked, id, owner, playerTu
     ${type.includes('sentence') && !type.includes('empty') && 'bg-sentenceCardBg'} 
     ${playerTurn === owner && 'hover:scale-105 transition-transform'} cursor-pointer my-1`}
             onClick={() => onCardClicked(type, id as number, owner)}>
-            <p className='font-sans font-bold text-xs leading-[0.5rem] md:text-sm lg:text-sm'>{content}</p>
+            <p className='font-sans font-bold text-xs leading-[0.8rem] md:text-sm lg:text-sm'>{content}</p>
         </div>
     )
 }
