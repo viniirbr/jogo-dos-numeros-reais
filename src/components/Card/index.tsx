@@ -17,9 +17,9 @@ export default function Card({ content, type, onCardClicked, id, owner, playerTu
         bg-transparent rounded-lg border-2 ${!type.includes('empty') && 'shadow-md shadow-black'} flex flex-col items-center justify-center
     ${type.includes('empty') && 'border-dashed'}  ${type.includes('number') && !type.includes('empty') && 'bg-numberCardBg'}
     ${type.includes('sentence') && !type.includes('empty') && 'bg-sentenceCardBg'} 
-    ${playerTurn === owner && 'hover:scale-105 transition-transform'}`}
+    ${playerTurn === owner && 'hover:scale-105 transition-transform'} cursor-pointer my-1`}
             onClick={() => onCardClicked(type, id as number, owner)}>
-            <p className='font-cursive text-xs leading-[0.7rem] md:text-sm lg:text-sm'>{content}</p>
+            <p className='font-sans font-bold text-xs leading-[0.5rem] md:text-sm lg:text-sm'>{content}</p>
         </div>
     )
 }

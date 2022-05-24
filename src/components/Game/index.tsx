@@ -110,7 +110,7 @@ export function Game() {
   }
 
   return (
-    <div className="flex flex-col h-[100vh] justify-between p-3">
+    <div className="flex flex-col h-[100vh] justify-between p-3 gap-4">
       <Report isOpen={isOpen} setIsOpen={setIsOpen} title={reportTitle} text={reportText} />
 
       {player2Numbers.length === 0
